@@ -7,7 +7,7 @@ El principio nos dice que un objeto debe realizar una sola cosa, su proposito es
 
 2. ¿Qué características tiene, según su opinión, un “buen” código o código limpio?
 
-Pues en mi opinion un buen codigo es legible, se puede entender lo que realiza sin ir mas alla de revisando parte por parte, tambien creo que respeta los principios de SOLID y clean architecture, ya que ayuda a que exista bajo acomplamiento entre clases y alta cohesion de las mismas 
+Pues en mi opinion un buen codigo es legible, se puede entender lo que realiza sin ir mas alla de revisando parte por parte, tambien creo que respeta los principios de SOLID, ya que ayuda a que exista bajo acomplamiento entre clases y alta cohesion de las mismas 
 
 3. Detalla cómo harías todo aquello que no hayas llegado a completar
 
