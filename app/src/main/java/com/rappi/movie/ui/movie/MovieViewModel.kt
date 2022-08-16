@@ -1,5 +1,7 @@
 package com.rappi.movie.ui.movie
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rappi.movie.data.safeLaunch
@@ -18,12 +20,23 @@ class MovieViewModel @Inject constructor(
     private val getTrendingMovies: GetTrendingMoviesUseCase
 ) : ViewModel() {
 
-    private val _upcomingMoviesList = MutableSharedFlow<List<MovieModel>>()
-    val upcomingMoviesList get() = _upcomingMoviesList.asSharedFlow()
+    private val _upcomingMoviesList = MutableLiveData<List<MovieModel>>()
+    val upcomingMoviesList: LiveData<List<MovieModel>> get() = _upcomingMoviesList
 
-    private val _trendingMoviesList = MutableSharedFlow<List<MovieModel>>()
-    val trendingMoviesList get() = _trendingMoviesList.asSharedFlow()
+    private val _trendingMoviesList = MutableLiveData<List<MovieModel>>()
+    val trendingMoviesList: LiveData<List<MovieModel>> get() = _trendingMoviesList
 
+    var isInitialized = false
+
+    fun loadHome() {
+
+        if (!isInitialized) {
+            initData()
+            isInitialized = true
+        }
+
+
+    }
 
     fun initData() {
         getUpcomingMovies()
@@ -33,7 +46,7 @@ class MovieViewModel @Inject constructor(
     private fun getUpcomingMovies() {
         viewModelScope.safeLaunch {
             getUpcomingMovies.invoke().catch { }.collect {
-                _upcomingMoviesList.emit(it)
+                _upcomingMoviesList.postValue(it)
             }
         }
     }
@@ -41,7 +54,7 @@ class MovieViewModel @Inject constructor(
     private fun getTrendingMovies() {
         viewModelScope.safeLaunch {
             getTrendingMovies.invoke().catch { }.collect {
-                _trendingMoviesList.emit(it)
+                _trendingMoviesList.postValue(it)
             }
         }
     }

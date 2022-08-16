@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +24,7 @@ class MovieFragment : Fragment() {
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MovieViewModel by viewModels()
+    private val viewModel: MovieViewModel by activityViewModels()
 
     private lateinit var upcomingMovieAdapter: MovieAdapter
     private lateinit var trendingMovieAdapter: MovieAdapter
@@ -41,17 +42,13 @@ class MovieFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.upcomingMoviesList.flowWithLifecycle(lifecycle).collectLatest {
-                upcomingMovieAdapter.submitList(it)
-            }
+        viewModel.upcomingMoviesList.observe(viewLifecycleOwner) {
+            upcomingMovieAdapter.submitList(it)
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.trendingMoviesList.flowWithLifecycle(lifecycle).collectLatest {
-                trendingMovieAdapter.submitList(it)
-            }
+
+        viewModel.trendingMoviesList.observe(viewLifecycleOwner) {
+            trendingMovieAdapter.submitList(it)
         }
-        viewModel.initData()
     }
 
     private fun setupAdapter() {
